@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 转发请求到 Kimi API
+// 转发请求到 DeepSeek API
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const apiKey = process.env.KIMI_API_KEY;
+    const apiKey = process.env.DEEPSEEK_API_KEY || process.env.KIMI_API_KEY;
     
     if (!apiKey) {
       return NextResponse.json(
@@ -13,14 +13,14 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'moonshot-v1-8k',
+        model: 'deepseek-chat',
         messages: body.messages,
         temperature: 0.7,
         max_tokens: 500,
